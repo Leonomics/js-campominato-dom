@@ -1,6 +1,9 @@
 const playButtonEl = document.querySelector('.play_button');
 const gridElement = document.querySelector('.grid');
 const difficoltaSelectEl = document.querySelector('select[name="difficolta"]')
+let score = 0;
+
+console.dir(gridElement)
 
 playButtonEl.addEventListener('click', startGame);
 
@@ -13,18 +16,27 @@ function startGame(){
     console.log(difficoltaSelezionata);
 
     let dimensione = calcolaDimensioneGriglia(difficoltaSelezionata);
-    const numeroCelle = dimensione ** 2;
 
-    posizioniBombe = generaBombe(numeroCelle);
+    posizioniBombe = generaBombe(dimensione**2);
+    console.log(posizioniBombe);
 
+    creaGriglia(dimensione);
+
+
+}
+
+function creaGriglia(dimensioneGriglia){
+
+    const numeroCelle = dimensioneGriglia ** 2;
     for(let i = 0; i<numeroCelle; i++){
         const cella = creaCella();
-        cella.style.flexBasis = `${100/dimensione}%`
-        cella.innerHTML = i + 1;
-        //div.append(cella);
-        gridElement.append(cella);    
-    }
+        cella.style.flexBasis = `${100/dimensioneGriglia}%`
 
+        cella.dataset.numero = i +1;
+        cella.innerHTML = i + 1;
+        
+        gridElement.append(cella); 
+    }
 }
 
 function generaBombe(max){
@@ -54,9 +66,21 @@ function creaCella(){
 }
 
 function onClick(){
-    this.classList.toggle('clicked');
+    //this.classList.toggle('clicked');
+    const numeroCella = parseInt(this.innerHTML);
+    console.log(numeroCella);
+    console.log(posizioniBombe.includes(numeroCella));
+    let className = 'success';
+    if(posizioniBombe.includes(numeroCella)){
+        className = 'danger';
+    }
+
+    this.classList.add(className)
+    finishGame(className);
 }
 
+
+//svuota la griglia
 function resetGame(){
     gridElement.innerHTML="";
 }
@@ -65,14 +89,30 @@ function calcolaDimensioneGriglia(difficolta){
     let dimensione = 10;
 
     if(difficolta==='hard'){
-        dimensione = 9;
+        dimensione = 7;
     }else if(difficolta ==='medium'){
-        dimensione = 7
+        dimensione = 9;
     }
 
     return dimensione;
 }
 
+//condizioni che decretano la fine del gioco
+function finishGame (className){
+    if(className == 'danger'){
+        console.log("game over")
+        console.log("your score: "+score);
+        resetGame();
+
+    }else if (className=='success'){
+        score++;
+    }
+    else if(score == 84){
+        console.log("you win")
+        console.log("your score: "+score);
+        resetGame();
+    }
+}
 
 
 
