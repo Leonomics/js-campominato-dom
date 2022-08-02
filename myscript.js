@@ -2,7 +2,6 @@ const playButtonEl = document.querySelector('.play_button');
 const gridElement = document.querySelector('.grid');
 const difficoltaSelectEl = document.querySelector('select[name="difficolta"]')
 let score = 0;
-let dimensione = calcolaDimensioneGriglia(difficoltaSelectEl);
 
 console.dir(gridElement)
 
@@ -38,6 +37,7 @@ function creaGriglia(dimensioneGriglia){
         
         gridElement.append(cella); 
     }
+    return numeroCelle;
 }
 
 function generaBombe(max){
@@ -72,12 +72,15 @@ function onClick(){
     console.log(numeroCella);
     console.log(posizioniBombe.includes(numeroCella));
     let className = 'success';
+    //cella.removeEventListener('click', onClick)
     if(posizioniBombe.includes(numeroCella)){
         className = 'danger';
     }
 
     this.classList.add(className)
-    finishGame(dimensione, className);
+    numeroCelle = creaGriglia(calcolaDimensioneGriglia(difficoltaSelectEl))
+    finishGame(className);
+    win(numeroCelle);
 }
 
 
@@ -100,7 +103,7 @@ function calcolaDimensioneGriglia(difficolta){
 
 
 //condizioni che decretano la fine del gioco
-function finishGame(dimensione, className){
+function finishGame(className){
         if(className == 'danger'){
             console.log("game over")
             console.log("your score: "+score);
@@ -109,11 +112,18 @@ function finishGame(dimensione, className){
         }else if (className=='success'){
             score++;
         }
-        else if(score == (dimensione-16)){
+        /*else if(score == (dimensione-posizioniBombe.length)){
             console.log("you win")
             console.log("your score: "+score);
             resetGame();
-        }
+        }*/
+}
+function win(numeroCelle){
+    if(score == (numeroCelle-posizioniBombe.length)){
+        console.log("you win")
+        console.log("your score: "+score);
+        resetGame();
+    }
 }
 
 
