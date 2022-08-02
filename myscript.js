@@ -78,7 +78,7 @@ function onClick(){
     }
 
     this.classList.add(className)
-    numeroCelle = creaGriglia(calcolaDimensioneGriglia(difficoltaSelectEl))
+    let numeroCelle = creaGriglia(calcolaDimensioneGriglia(difficoltaSelectEl))
     finishGame(className);
     win(numeroCelle);
 }
